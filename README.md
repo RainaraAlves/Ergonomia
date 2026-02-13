@@ -1,203 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>MÉTODO PIAE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIAE - Protocolo Integrado de Avaliação Ergonômica</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; width: 100%; max-width: 500px; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        h1 { color: #1a73e8; font-size: 22px; text-align: center; margin-bottom: 10px; }
+        p.subtitle { text-align: center; color: #5f6368; font-size: 14px; margin-bottom: 25px; }
+        
+        .field { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #3c4043; }
+        select { width: 100%; padding: 12px; border: 2px solid #dadce0; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.2s; }
+        select:focus { border-color: #1a73e8; }
 
-<style>
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    background-color:#f4f6f9;
-    margin:0;
-}
+        button { width: 100%; padding: 15px; background-color: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        button:hover { background-color: #1557b0; }
 
-header{
-    background:#1f3c88;
-    color:white;
-    padding:20px;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-}
-
-.container{
-    padding:30px;
-}
-
-.card{
-    background:white;
-    border-radius:8px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    margin-bottom:30px;
-    padding:20px;
-}
-
-.titulo-bloco{
-    background:#e9eef7;
-    padding:10px;
-    font-weight:bold;
-    font-size:18px;
-    border-left:6px solid #1f3c88;
-    margin-bottom:20px;
-}
-
-.grid-opcoes{
-    display:flex;
-    gap:40px;
-    align-items:center;
-}
-
-.imagem-postura{
-    width:180px;
-}
-
-.opcoes{
-    display:grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap:15px;
-}
-
-.opcao{
-    background:#f8f9fb;
-    padding:10px;
-    border-radius:6px;
-    border:1px solid #dcdcdc;
-}
-
-.opcao input{
-    margin-right:8px;
-}
-
-.botao{
-    background:#1f3c88;
-    color:white;
-    padding:12px 25px;
-    border:none;
-    border-radius:6px;
-    font-size:16px;
-    cursor:pointer;
-}
-.botao:hover{
-    background:#162d66;
-}
-</style>
+        #resultado-box { margin-top: 25px; padding: 20px; border-radius: 8px; display: none; text-align: center; }
+        .res-titulo { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .res-nivel { font-size: 32px; font-weight: 900; margin: 0; }
+        
+        /* Cores dos Níveis de Ação */
+        .na-1 { background-color: #ccffcc; color: #006600; border: 2px solid #006600; }
+        .na-2 { background-color: #ffffcc; color: #666600; border: 2px solid #666600; }
+        .na-3 { background-color: #ffebcc; color: #994d00; border: 2px solid #994d00; }
+        .na-4 { background-color: #ffcccc; color: #990000; border: 2px solid #990000; }
+    </style>
 </head>
-
 <body>
 
-<header>
-    MÉTODO PIAE – Plataforma Integrada de Análise Ergonômica
-</header>
-
 <div class="container">
+    <h1>Protocolo PIAE</h1>
+    <p class="subtitle">Insira as pontuações conforme a planilha do TCC</p>
 
-    <!-- IDENTIFICAÇÃO -->
-    <div class="card">
-        <div class="titulo-bloco">IDENTIFICAÇÃO</div>
-
-        Nome: <input type="text" style="width:300px;"><br><br>
-        Empresa: <input type="text" style="width:300px;"><br><br>
-        Setor: <input type="text" style="width:300px;"><br><br>
-        Função: <input type="text" style="width:300px;">
+    <div class="field">
+        <label>Pontuação RULA / REBA:</label>
+        <select id="rula_reba">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7 ou +</option>
+        </select>
     </div>
 
-
-    <!-- PESCOÇO -->
-    <div class="card">
-        <div class="titulo-bloco">POSTURA DO PESCOÇO</div>
-
-        <div class="grid-opcoes">
-
-            <img src="img/pescoco_0_10.png" class="imagem-postura">
-
-            <div class="opcoes">
-
-                <!-- 🔹 VERSÃO CORRIGIDA (EXATAMENTE COMO NA PLANILHA) -->
-                <label class="opcao">
-                    <input type="radio" name="pescoco" value="0-10">
-                    0º a 10º de flexão
-                </label>
-
-                <label class="opcao">
-                    <input type="radio" name="pescoco" value="10-20">
-                    10º a 20º de flexão
-                </label>
-
-                <label class="opcao">
-                    <input type="radio" name="pescoco" value="20+">
-                    +20º de flexão
-                </label>
-
-                <label class="opcao">
-                    <input type="radio" name="pescoco" value="extensao">
-                    Extensão
-                </label>
-
-            </div>
-
-        </div>
+    <div class="field">
+        <label>Categoria de Risco OWAS:</label>
+        <select id="owas">
+            <option value="1">1 (Risco Normal)</option>
+            <option value="2">2 (Requer Atenção)</option>
+            <option value="3">3 (Mudanças em Breve)</option>
+            <option value="4">4 (Mudanças Imediatas)</option>
+        </select>
     </div>
 
+    <button onclick="calcularPIAE()">Consultar Tabela PIAE</button>
 
-    <!-- BRAÇOS -->
-    <div class="card">
-        <div class="titulo-bloco">POSTURA DOS BRAÇOS</div>
-
-        <div class="opcoes">
-
-            <!-- 🔹 VERSÃO CORRIGIDA (EXATAMENTE COMO NA PLANILHA) -->
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                0 a 20 / extensão e flexão
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                Flexão +20 e extensão 20 e 45
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                Extensão 45 a 90
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                Extensão +90
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                Flexão +90
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                > 20 Extensão
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                Flexão 20 a 45
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                Um braço p cima
-            </label>
-
-            <label class="opcao">
-                <input type="radio" name="bracos">
-                Dois braço p baixo
-            </label>
-
-        </div>
+    <div id="resultado-box">
+        <p class="res-titulo">Nível de Ação Integrado</p>
+        <p id="nivel-valor" class="res-nivel"></p>
+        <p id="desc-acao" style="font-size: 13px; margin-top: 10px; font-weight: 500;"></p>
     </div>
-
-    <button class="botao">Calcular</button>
-
 </div>
+
+<script>
+    function calcularPIAE() {
+        const rr = parseInt(document.getElementById('rula_reba').value);
+        const ow = parseInt(document.getElementById('owas').value);
+        const box = document.getElementById('resultado-box');
+        const nivelTxt = document.getElementById('nivel-valor');
+        const acaoTxt = document.getElementById('desc-acao');
+
+        let na = 0;
+        let acao = "";
+
+        // LÓGICA DA MATRIZ DA PLANILHA (AJUSTE OS NÚMEROS ABAIXO)
+        // Aqui simulamos o cruzamento de linhas e colunas
+        if (ow === 1) {
+            if (rr <= 2) na = 1;
+            else if (rr <= 4) na = 2;
+            else na = 3;
+        } else if (ow === 2) {
+            if (rr <= 3) na = 2;
+            else na = 3;
+        } else if (ow === 3) {
+            if (rr <= 2) na = 2;
+            else if (rr <= 6) na = 3;
+            else na = 4;
+        } else if (ow === 4) {
+            na = 4;
+        }
+
+        // Definição das frases de ação baseadas no nível
+        const orientacoes = [
+            "",
+            "Postura aceitável; nenhum risco imediato identificado.",
+            "Investigar mais detalhadamente; implementar melhorias se possível.",
+            "Mudanças necessárias no curto prazo para evitar afastamentos.",
+            "Risco crítico! Interrupção ou alteração imediata da atividade."
+        ];
+
+        // Exibição do resultado
+        box.style.display = 'block';
+        box.className = 'na-' + na;
+        nivelTxt.innerText = na;
+        acaoTxt.innerText = orientacoes[na];
+    }
+</script>
 
 </body>
 </html>
