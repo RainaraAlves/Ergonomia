@@ -2,89 +2,102 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>MÉTODO PIAE</title>
+<title>Plataforma PIAE</title>
 
 <style>
 body{
-    font-family: Arial, Helvetica, sans-serif;
-    background:#f2f4f8;
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
     margin:0;
-}
-
-header{
-    background:#1f3c88;
-    color:white;
-    text-align:center;
     padding:20px;
-    font-size:26px;
-    font-weight:bold;
 }
 
-.container{
-    padding:30px;
-    max-width:900px;
-    margin:auto;
+h1{
+    text-align:center;
+    margin-bottom:30px;
 }
 
-.card{
+.section{
     background:white;
     padding:20px;
+    margin-bottom:20px;
     border-radius:8px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom:25px;
-}
-
-h2{
-    background:#e8edf7;
-    padding:10px;
-    border-left:5px solid #1f3c88;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
 label{
     font-weight:bold;
     display:block;
-    margin-top:15px;
+    margin-top:10px;
 }
 
-select{
+select, input{
     width:100%;
     padding:8px;
     margin-top:5px;
-    border-radius:5px;
+    border-radius:6px;
     border:1px solid #ccc;
 }
 
-button{
-    background:#1f3c88;
-    color:white;
-    padding:12px 25px;
-    border:none;
-    border-radius:6px;
-    font-size:16px;
-    cursor:pointer;
+.result-box{
+    display:flex;
+    justify-content:space-around;
     margin-top:20px;
 }
 
-button:hover{
-    background:#162d66;
+.card{
+    background:#e9edf3;
+    padding:20px;
+    border-radius:10px;
+    width:30%;
+    text-align:center;
 }
 
-.resultado{
-    font-size:18px;
+.score{
+    font-size:28px;
     font-weight:bold;
-    margin-top:15px;
+    margin-top:10px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px;
+    width:100%;
+    background:#1e3a8a;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#162d6a;
 }
 </style>
 </head>
 
 <body>
 
-<header>MÉTODO PIAE</header>
+<h1>PLATAFORMA ERGONÔMICA INTEGRADA - PIAE</h1>
 
-<div class="container">
+<div class="section">
+<h2>DADOS DA AVALIAÇÃO</h2>
 
-<div class="card">
+<label>Nome</label>
+<input type="text" id="nome">
 
+<label>Empresa</label>
+<input type="text" id="empresa">
+
+<label>Setor</label>
+<input type="text" id="setor">
+
+<label>Função</label>
+<input type="text" id="funcao">
+</div>
+
+<div class="section">
 <h2>PESCOÇO</h2>
 
 <label>Flexão do Pescoço</label>
@@ -100,14 +113,11 @@ button:hover{
 <select id="neckCorrection">
     <option value="0">Nenhuma</option>
     <option value="1">Torção (Rotação)</option>
-    <option value="1">Inclinação lateral</option>
+    <option value="2">Inclinação lateral</option>
 </select>
-
 </div>
 
-
-<div class="card">
-
+<div class="section">
 <h2>BRAÇOS</h2>
 
 <label>Descrição - Braços</label>
@@ -129,34 +139,46 @@ button:hover{
     <option value="0">Nenhuma</option>
     <option value="1">Aplicar correção</option>
 </select>
-
 </div>
 
-<button onclick="calcular()">Calcular</button>
+<div class="section">
+<button onclick="calcular()">CALCULAR RESULTADO</button>
 
-<div class="resultado" id="resultado"></div>
+<div class="result-box">
+    <div class="card">
+        <h3>REBA</h3>
+        <div class="score" id="rebaScore">0</div>
+    </div>
 
+    <div class="card">
+        <h3>RULA</h3>
+        <div class="score" id="rulaScore">0</div>
+    </div>
+
+    <div class="card">
+        <h3>OWAS</h3>
+        <div class="score" id="owasScore">0</div>
+    </div>
 </div>
 
+</div>
 
 <script>
 function calcular(){
 
     let neck = parseInt(document.getElementById("neckFlexion").value);
     let neckCorr = parseInt(document.getElementById("neckCorrection").value);
-
     let arm = parseInt(document.getElementById("armPosition").value);
     let armCorr = parseInt(document.getElementById("armCorrection").value);
 
-    let scoreNeck = neck + neckCorr;
-    let scoreArm = arm + armCorr;
+    // ⚠️ AQUI depois vamos substituir pela lógica exata da planilha
+    let reba = neck + neckCorr + arm + armCorr;
+    let rula = (neck * 2) + arm;
+    let owas = neck + armCorr;
 
-    let total = scoreNeck + scoreArm;
-
-    document.getElementById("resultado").innerHTML =
-        "Score Pescoço: " + scoreNeck +
-        " | Score Braços: " + scoreArm +
-        " | Score Parcial Total: " + total;
+    document.getElementById("rebaScore").innerText = reba;
+    document.getElementById("rulaScore").innerText = rula;
+    document.getElementById("owasScore").innerText = owas;
 }
 </script>
 
