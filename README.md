@@ -2,161 +2,141 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIAE - Avaliação Ergonômica</title>
+    <title>PIAE - Protocolo Integrado</title>
     <style>
         :root {
-            --primary: #2c3e50; --accent: #3498db; --bg: #f8f9fa;
+            --azul-pet: #1a73e8;
+            --cinza-bg: #f1f3f4;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--primary); margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h1 { text-align: center; border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--cinza-bg); padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
-        .metodo-section { margin-top: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 10px; }
-        .metodo-title { font-weight: bold; background: var(--primary); color: white; padding: 10px; margin: -15px -15px 15px -15px; border-radius: 10px 10px 0 0; }
+        h1 { color: var(--azul-pet); text-align: center; margin-bottom: 30px; font-size: 24px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
         
-        .pergunta { margin-bottom: 20px; }
-        .pergunta label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
-        
-        /* Estilo dos Botões de Opção */
-        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; }
-        .btn-option { 
-            flex: 1; min-width: 100px; padding: 12px; border: 2px solid #ddd; 
-            border-radius: 8px; background: white; cursor: pointer; text-align: center;
-            transition: 0.3s; font-size: 13px; font-weight: 500;
-        }
-        .btn-option:hover { border-color: var(--accent); background: #f0f7ff; }
-        .btn-option.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .metodo-card { border: 1px solid #dadce0; border-radius: 8px; padding: 15px; }
+        .metodo-card h3 { margin-top: 0; background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 16px; text-align: center; border-bottom: 2px solid #1a73e8; }
 
-        .btn-calcular { 
-            width: 100%; padding: 20px; background: #27ae60; color: white; 
-            border: none; border-radius: 10px; font-size: 18px; font-weight: bold; 
-            cursor: pointer; margin-top: 30px; 
+        .label-grupo { font-weight: bold; font-size: 13px; margin: 15px 0 8px 0; display: block; color: #5f6368; }
+        
+        /* Grade de Botões */
+        .botoes-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .btn-pos { 
+            padding: 10px 5px; border: 1px solid #ccc; background: white; 
+            cursor: pointer; font-size: 14px; font-weight: bold; border-radius: 4px;
+            transition: 0.2s;
         }
-        .btn-calcular:hover { background: #219150; }
+        .btn-pos:hover { background: #e8f0fe; }
+        .btn-pos.active { background: var(--azul-pet); color: white; border-color: var(--azul-pet); }
 
+        /* Botão de Calcular */
+        .btn-final { 
+            grid-column: span 2; margin-top: 30px; padding: 15px; 
+            background: #202124; color: white; border: none; border-radius: 4px; 
+            font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+        .btn-final:hover { background: #000; }
+
+        /* Resultado */
         #resultado-piae { 
-            margin-top: 30px; padding: 25px; border-radius: 10px; 
-            display: none; text-align: center; 
+            margin-top: 25px; padding: 20px; border-radius: 8px; 
+            display: none; text-align: center; border: 3px solid transparent;
         }
-        .nivel-card { font-size: 40px; font-weight: 900; margin: 10px 0; }
+        .na-valor { font-size: 48px; font-weight: 900; margin: 5px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Protocolo PIAE</h1>
-    <p style="text-align: center;">Preencha as posições observadas no posto de trabalho.</p>
+    <h1>Avaliação Ergonômica - Aba PIAE</h1>
 
-    <div class="metodo-section">
-        <div class="metodo-title">MÉTODO OWAS (Costas, Braços e Pernas)</div>
-        
-        <div class="pergunta">
-            <label>Posição das Costas:</label>
-            <div class="btn-group" id="owas_costas">
-                <div class="btn-option" onclick="selectOpt(this, 'c1')">1. Ereta</div>
-                <div class="btn-option" onclick="selectOpt(this, 'c2')">2. Inclinada</div>
-                <div class="btn-option" onclick="selectOpt(this, 'c3')">3. Girada</div>
-                <div class="btn-option" onclick="selectOpt(this, 'c4')">4. Inc./Girada</div>
+    <div class="grid-container">
+        <div class="metodo-card">
+            <h3>SCORE FINAL RULA / REBA</h3>
+            <span class="label-grupo">Selecione a pontuação obtida:</span>
+            <div class="botoes-row" id="grupo-rr">
+                <button class="btn-pos" onclick="setVal('rr', 1, this)">1</button>
+                <button class="btn-pos" onclick="setVal('rr', 2, this)">2</button>
+                <button class="btn-pos" onclick="setVal('rr', 3, this)">3</button>
+                <button class="btn-pos" onclick="setVal('rr', 4, this)">4</button>
+                <button class="btn-pos" onclick="setVal('rr', 5, this)">5</button>
+                <button class="btn-pos" onclick="setVal('rr', 6, this)">6</button>
+                <button class="btn-pos" onclick="setVal('rr', 7, this)">7+</button>
             </div>
         </div>
 
-        <div class="pergunta">
-            <label>Braços:</label>
-            <div class="btn-group" id="owas_bracos">
-                <div class="btn-option" onclick="selectOpt(this, 'b1')">1. Ambos abaixo</div>
-                <div class="btn-option" onclick="selectOpt(this, 'b2')">2. Um no nível/acima</div>
-                <div class="btn-option" onclick="selectOpt(this, 'b3')">3. Ambos acima</div>
+        <div class="metodo-card">
+            <h3>CATEGORIA DE RISCO OWAS</h3>
+            <span class="label-grupo">Selecione a categoria obtida:</span>
+            <div class="botoes-row" id="grupo-ow">
+                <button class="btn-pos" onclick="setVal('ow', 1, this)">1</button>
+                <button class="btn-pos" onclick="setVal('ow', 2, this)">2</button>
+                <button class="btn-pos" onclick="setVal('ow', 3, this)">3</button>
+                <button class="btn-pos" onclick="setVal('ow', 4, this)">4</button>
             </div>
         </div>
+
+        <button class="btn-final" onclick="processarPIAE()">GERAR NÍVEL DE AÇÃO INTEGRADO</button>
     </div>
-
-    <div class="metodo-section">
-        <div class="metodo-title">MÉTODO RULA / REBA (Membros Superiores)</div>
-        
-        <div class="pergunta">
-            <label>Inclinação do Tronco:</label>
-            <div class="btn-group" id="rula_tronco">
-                <div class="btn-option" onclick="selectOpt(this, 't1')">Ereto (0°)</div>
-                <div class="btn-option" onclick="selectOpt(this, 't2')">0-20°</div>
-                <div class="btn-option" onclick="selectOpt(this, 't3')">20-60°</div>
-                <div class="btn-option" onclick="selectOpt(this, 't4')">>60°</div>
-            </div>
-        </div>
-
-        <div class="pergunta">
-            <label>Esforço / Carga:</label>
-            <div class="btn-group" id="rula_carga">
-                <div class="btn-option" onclick="selectOpt(this, 'l1')">< 5kg</div>
-                <div class="btn-option" onclick="selectOpt(this, 'l2')">5 a 10kg</div>
-                <div class="btn-option" onclick="selectOpt(this, 'l3')">> 10kg</div>
-            </div>
-        </div>
-    </div>
-
-    <button class="btn-calcular" onclick="calcularPIAE()">CALCULAR RESULTADO INTEGRADO</button>
 
     <div id="resultado-piae">
-        <div style="font-weight: bold; text-transform: uppercase;">Nível de Ação PIAE</div>
-        <div id="nivel-num" class="nivel-card">--</div>
-        <div id="nivel-desc"></div>
+        <div style="font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Nível de Ação (PIAE)</div>
+        <div class="na-valor" id="na-display">0</div>
+        <div id="na-legenda" style="font-weight: bold;"></div>
     </div>
 </div>
 
 <script>
-    // Objeto para armazenar as seleções
-    let selections = {};
+    let dados = { rr: 0, ow: 0 };
 
-    function selectOpt(el, val) {
-        // Remove 'active' de todos os irmãos
-        const parent = el.parentElement;
-        Array.from(parent.children).forEach(child => child.classList.remove('active'));
-        // Adiciona 'active' no clicado
+    function setVal(tipo, valor, el) {
+        // Remove 'active' do grupo específico
+        const botoes = el.parentElement.querySelectorAll('.btn-pos');
+        botoes.forEach(b => b.classList.remove('active'));
+        
+        // Ativa o clicado
         el.classList.add('active');
-        // Salva valor
-        selections[parent.id] = val;
+        dados[tipo] = valor;
     }
 
-    function calcularPIAE() {
-        // Validação simples
-        if (Object.keys(selections).length < 4) {
-            alert("Por favor, selecione todas as posições antes de calcular.");
+    function processarPIAE() {
+        if (dados.rr === 0 || dados.ow === 0) {
+            alert("Selecione os valores de ambos os métodos!");
             return;
         }
 
-        // Lógica de cálculo (Simulação da Matriz da sua planilha)
-        // No seu TCC, aqui entra a fórmula exata que cruza os dados
-        let scoreRula = parseInt(selections.rula_tronco.replace('t','')) + parseInt(selections.rula_carga.replace('l',''));
-        let catOwas = parseInt(selections.owas_costas.replace('c','')); 
-
-        let naFinal = 1;
-        
-        // Exemplo de cruzamento de matriz PIAE
-        if(catOwas >= 3 || scoreRula >= 5) naFinal = 4;
-        else if(catOwas == 2 || scoreRula >= 3) naFinal = 3;
-        else if(catOwas == 1 && scoreRula == 2) naFinal = 2;
-        else naFinal = 1;
-
-        // Exibir Resultado
         const resDiv = document.getElementById('resultado-piae');
-        const numDiv = document.getElementById('nivel-num');
-        const descDiv = document.getElementById('nivel-desc');
-        
-        resDiv.style.display = 'block';
-        numDiv.innerText = naFinal;
+        const naDisplay = document.getElementById('na-display');
+        const naLegenda = document.getElementById('na-legenda');
 
-        const cores = ["", "#2ecc71", "#f1c40f", "#e67e22", "#e74c3c"];
-        const textos = [
-            "",
-            "RISCO BAIXO: Postura aceitável.",
-            "RISCO MÉDIO: Necessita investigação.",
-            "RISCO ALTO: Mudanças requeridas em breve.",
-            "RISCO CRÍTICO: Mudanças imediatas!"
+        // Lógica da Matriz PIAE (Exatamente como na sua planilha)
+        let na = 0;
+        if (dados.ow === 1) {
+            na = (dados.rr <= 2) ? 1 : (dados.rr <= 5) ? 2 : 3;
+        } else if (dados.ow === 2) {
+            na = (dados.rr <= 4) ? 2 : 3;
+        } else if (dados.ow === 3) {
+            na = (dados.rr <= 3) ? 2 : (dados.rr <= 6) ? 3 : 4;
+        } else if (dados.ow === 4) {
+            na = 4;
+        }
+
+        // Configuração visual do resultado
+        resDiv.style.display = 'block';
+        naDisplay.innerText = na;
+
+        const config = [
+            {},
+            { cor: '#ccffcc', borda: '#008000', texto: 'NÍVEL 1: Baixo Risco - Postura Aceitável' },
+            { cor: '#ffffcc', borda: '#b8b800', texto: 'NÍVEL 2: Médio Risco - Requer Atenção' },
+            { cor: '#ffe5cc', borda: '#d35400', texto: 'NÍVEL 3: Alto Risco - Mudanças em Breve' },
+            { cor: '#ffcccc', borda: '#c0392b', texto: 'NÍVEL 4: Crítico - Mudanças Imediatas' }
         ];
 
-        resDiv.style.backgroundColor = cores[naFinal];
-        resDiv.style.color = (naFinal == 2) ? 'black' : 'white';
-        descDiv.innerText = textos[naFinal];
+        resDiv.style.backgroundColor = config[na].cor;
+        resDiv.style.borderColor = config[na].borda;
+        resDiv.style.color = config[na].borda;
+        naLegenda.innerText = config[na].texto;
     }
 </script>
 
